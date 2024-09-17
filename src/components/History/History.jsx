@@ -93,25 +93,23 @@ const History = () => {
       component={Paper}
       sx={{
         backgroundColor: "#242424",
-        overflowX: "auto", // Ensure horizontal scrolling on small screens
+        overflowX: "hidden", // Disable horizontal scrolling
       }}
     >
-      <Table
-        sx={{ minWidth: 320, "@media (min-width:600px)": { minWidth: 650 } }}
-      >
+      <Table sx={{ minWidth: "auto", tableLayout: "fixed" }}>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ color: "#ffffff", padding: { xs: 0.5, sm: 1 } }}>
+            <TableCell sx={{ color: "#ffffff", padding: 1, width: "50%" }}>
               <Typography variant="subtitle2" component="div" color="inherit">
                 Expense
               </Typography>
             </TableCell>
-            <TableCell sx={{ color: "#ffffff", padding: { xs: 0.5, sm: 1 } }}>
+            <TableCell sx={{ color: "#ffffff", padding: 1, width: "30%" }}>
               <Typography variant="subtitle2" component="div" color="inherit">
                 Amount $
               </Typography>
             </TableCell>
-            <TableCell sx={{ color: "#ffffff", padding: { xs: 0.5, sm: 1 } }}>
+            <TableCell sx={{ color: "#ffffff", padding: 1, width: "20%" }}>
               <Typography variant="subtitle2" component="div" color="inherit">
                 Action
               </Typography>
@@ -121,13 +119,19 @@ const History = () => {
         <TableBody>
           {expenses.map((expense, index) => (
             <TableRow key={index}>
-              <TableCell sx={{ color: "#E0E0E0", padding: { xs: 0.5, sm: 1 } }}>
+              <TableCell
+                sx={{
+                  color: "#E0E0E0",
+                  padding: 1,
+                  overflowWrap: "break-word",
+                }}
+              >
                 {expense.description}
               </TableCell>
-              <TableCell sx={{ color: "#E0E0E0", padding: { xs: 0.5, sm: 1 } }}>
+              <TableCell sx={{ color: "#E0E0E0", padding: 1 }}>
                 {expense.amount}
               </TableCell>
-              <TableCell sx={{ padding: { xs: 0.5, sm: 1 } }}>
+              <TableCell sx={{ padding: 1 }}>
                 <IconButton
                   onClick={() => handleDeleteClick(index)}
                   sx={{ color: "#03DAC6" }}

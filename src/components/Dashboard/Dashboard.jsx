@@ -19,7 +19,7 @@
 //   LinearScale,
 //   BarElement,
 //   LineElement,
-//   PointElement, // Register the point element for line charts
+//   PointElement,
 //   Title,
 //   Tooltip,
 //   Legend
@@ -34,10 +34,10 @@
 //       {
 //         label: "Expenses $",
 //         data: expenses.map((expense) => expense.amount),
-//         backgroundColor: "rgba(75, 192, 192, 0.6)", // For Bar chart
-//         borderColor: "rgba(75, 192, 192, 1)", // For Line chart
-//         borderWidth: 1, // For Line chart
-//         fill: false, // For Line chart
+//         backgroundColor: "rgba(75, 192, 192, 0.6)",
+//         borderColor: "rgba(75, 192, 192, 1)",
+//         borderWidth: 1,
+//         fill: false,
 //       },
 //     ],
 //   };
@@ -48,13 +48,13 @@
 //       legend: {
 //         position: "top",
 //         labels: {
-//           color: "#E0E0E0", // Match your text color
+//           color: "#E0E0E0",
 //         },
 //       },
 //       title: {
 //         display: true,
 //         text: "Expenses Bar Chart",
-//         color: "#E0E0E0", // Match your text color
+//         color: "#E0E0E0",
 //       },
 //       tooltip: {
 //         callbacks: {
@@ -73,13 +73,13 @@
 //         type: "category",
 //         ticks: {
 //           autoSkip: false,
-//           color: "#E0E0E0", // Match your text color
+//           color: "#E0E0E0",
 //         },
 //       },
 //       y: {
 //         beginAtZero: true,
 //         ticks: {
-//           color: "#E0E0E0", // Match your text color
+//           color: "#E0E0E0",
 //         },
 //       },
 //     },
@@ -91,13 +91,13 @@
 //       legend: {
 //         position: "top",
 //         labels: {
-//           color: "#E0E0E0", // Match your text color
+//           color: "#E0E0E0",
 //         },
 //       },
 //       title: {
 //         display: true,
 //         text: "Expenses Line Chart",
-//         color: "#E0E0E0", // Match your text color
+//         color: "#E0E0E0",
 //       },
 //       tooltip: {
 //         callbacks: {
@@ -116,13 +116,13 @@
 //         type: "category",
 //         ticks: {
 //           autoSkip: false,
-//           color: "#E0E0E0", // Match your text color
+//           color: "#E0E0E0",
 //         },
 //       },
 //       y: {
 //         beginAtZero: true,
 //         ticks: {
-//           color: "#E0E0E0", // Match your text color
+//           color: "#E0E0E0",
 //         },
 //       },
 //     },
@@ -130,7 +130,7 @@
 
 //   return (
 //     <Grid container spacing={2} direction="column">
-//       <Grid item xs={12}>
+//       <Grid item xs={12} sm={6} md={4}>
 //         <Card
 //           sx={{ backgroundColor: "background.paper", color: "text.primary" }}
 //         >
@@ -142,7 +142,7 @@
 //           </CardContent>
 //         </Card>
 //       </Grid>
-//       <Grid item xs={12}>
+//       <Grid item xs={12} sm={6} md={4}>
 //         <Card
 //           sx={{ backgroundColor: "background.paper", color: "text.primary" }}
 //         >
@@ -204,8 +204,9 @@ const DashboardPage = () => {
     ],
   };
 
-  const barOptions = {
+  const commonOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top",
@@ -215,7 +216,6 @@ const DashboardPage = () => {
       },
       title: {
         display: true,
-        text: "Expenses Bar Chart",
         color: "#E0E0E0",
       },
       tooltip: {
@@ -234,7 +234,9 @@ const DashboardPage = () => {
       x: {
         type: "category",
         ticks: {
-          autoSkip: false,
+          autoSkip: true,
+          maxRotation: 45,
+          minRotation: 30,
           color: "#E0E0E0",
         },
       },
@@ -247,52 +249,31 @@ const DashboardPage = () => {
     },
   };
 
-  const lineOptions = {
-    responsive: true,
+  const barOptions = {
+    ...commonOptions,
     plugins: {
-      legend: {
-        position: "top",
-        labels: {
-          color: "#E0E0E0",
-        },
-      },
+      ...commonOptions.plugins,
       title: {
-        display: true,
-        text: "Expenses Line Chart",
-        color: "#E0E0E0",
-      },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const label = context.dataset.label || "";
-            const value = context.raw;
-            return `${label}: ${value}`;
-          },
-        },
-        intersect: false,
-        mode: "index",
+        ...commonOptions.plugins.title,
+        text: "Expenses Bar Chart",
       },
     },
-    scales: {
-      x: {
-        type: "category",
-        ticks: {
-          autoSkip: false,
-          color: "#E0E0E0",
-        },
-      },
-      y: {
-        beginAtZero: true,
-        ticks: {
-          color: "#E0E0E0",
-        },
+  };
+
+  const lineOptions = {
+    ...commonOptions,
+    plugins: {
+      ...commonOptions.plugins,
+      title: {
+        ...commonOptions.plugins.title,
+        text: "Expenses Line Chart",
       },
     },
   };
 
   return (
     <Grid container spacing={2} direction="column">
-      <Grid item xs={12} sm={6} md={4}>
+      <Grid item xs={12} sm={12} md={6}>
         <Card
           sx={{ backgroundColor: "background.paper", color: "text.primary" }}
         >
@@ -300,11 +281,13 @@ const DashboardPage = () => {
             <Typography variant="h6" component="div" gutterBottom>
               Bar Chart
             </Typography>
-            <Bar data={data} options={barOptions} />
+            <div style={{ height: 300 }}>
+              <Bar data={data} options={barOptions} />
+            </div>
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={12} sm={6} md={4}>
+      <Grid item xs={12} sm={12} md={6}>
         <Card
           sx={{ backgroundColor: "background.paper", color: "text.primary" }}
         >
@@ -312,7 +295,9 @@ const DashboardPage = () => {
             <Typography variant="h6" component="div" gutterBottom>
               Line Chart
             </Typography>
-            <Line data={data} options={lineOptions} />
+            <div style={{ height: 300 }}>
+              <Line data={data} options={lineOptions} />
+            </div>
           </CardContent>
         </Card>
       </Grid>
